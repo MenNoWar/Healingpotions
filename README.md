@@ -1,4 +1,4 @@
-# HearthStone
+# Healingpotions
 
 ## What..
 Healingpotions adds four different Healingpotions that will add different % values of your current maximal health 
@@ -16,13 +16,17 @@ Item | Requires | Biome | Cauldron Level | Heals
 Healing Potion | Base + Mushroom | Meadows | 1 | 25%
 Medium Healing Potion | Base + Thistle | Black Forest | 2 | 50%
 Huge Healing Potion | Base + FreezeGland | Mountains | 3 | 75%
-Godly Healing Potion | Base ü Flax | Plains | 4 | 100%
+Godly Healing Potion | Base + Flax | Plains | 4 | 100%
 
 #### Hint: 
 - the potions look nice as decoration on an itemstand (depending on taste)
 - each potion has a minimal cooldown of 3 seconds
 
 ## Versions
+### 1.0.1
++ removed falsely assigned "pickable" script from asset, which in some cases prevented picking up a dropped potion
++ fine tuned the clay-part texture to look more like Valheim item
+
 ### 1.0.0
 Initial Version
 

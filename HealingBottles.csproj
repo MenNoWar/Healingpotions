@@ -46,6 +46,7 @@
     <EmbeddedResource Include="Assets\bottles" />
     <None Include="Assets\bottles.manifest" />
     <None Include="GameDir.targets" />
+    <None Include="Publish_Template\manifest.json" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
@@ -102,16 +103,20 @@
       <Private>False</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Publish_Template\icon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == Debug del "$(TargetPath).mdb"
-if $(ConfigurationName) == Debug $(SolutionDir)pdb2mdb.exe "$(TargetPath)"
-      
-copy "$(TargetPath)" "$(GameDir)\Bepinex\plugins\$(TargetFileName)"
+    <PostBuildEvent>del "$(ProjectDir)\Publish_Template\*.zip"
+del "$(TargetPath).mdb"
+
+if $(ConfigurationName) == Debug copy "$(TargetPath)" "$(GameDir)\Bepinex\plugins\$(TargetFileName)"
 if $(ConfigurationName) == Debug copy "$(TargetPath).mdb" "$(GameDir)\Bepinex\plugins\$(TargetFileName).mdb"
+if $(ConfigurationName) == Debug $(SolutionDir)pdb2mdb.exe "$(TargetPath)"
 
 if $(ConfigurationName) == Release copy "$(TargetPath)" "$(ProjectDir)\Publish_Template"
-if $(ConfigurationName) == Release copy "$(ProjectDir)README.md" "$(ProjectDir)\Publish_Template"</PostBuildEvent>
+if $(ConfigurationName) == Release copy "$(ProjectDir)README.md" "$(ProjectDir)\Publish_Template"
+if $(ConfigurationName) == Release (powershell Compress-Archive -Path '$(ProjectDir)Publish_Template\*' -DestinationPath '$(ProjectDir)Publish_Template\$(ProjectName).zip' -Force)</PostBuildEvent>
   </PropertyGroup>
 </Project>
