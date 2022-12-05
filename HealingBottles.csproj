@@ -72,6 +72,8 @@
     <Reference Include="MonoMod.Utils, Version=22.5.1.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\MonoMod.Utils.22.5.1.1\lib\net452\MonoMod.Utils.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
     <Reference Include="UnityEngine">
       <HintPath>$(GameDir)\valheim_Data\Managed\UnityEngine.dll</HintPath>
       <Private>False</Private>
@@ -84,8 +86,6 @@
       <HintPath>$(GameDir)\BepInEx\core\BepInEx.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
     <Reference Include="UnityEngine">
       <HintPath>$(GameDir)\valheim_Data\Managed\UnityEngine.dll</HintPath>
       <Private>False</Private>
@@ -112,11 +112,15 @@
 del "$(TargetPath).mdb"
 
 if $(ConfigurationName) == Debug copy "$(TargetPath)" "$(GameDir)\Bepinex\plugins\$(TargetFileName)"
-if $(ConfigurationName) == Debug copy "$(TargetPath).mdb" "$(GameDir)\Bepinex\plugins\$(TargetFileName).mdb"
 if $(ConfigurationName) == Debug $(SolutionDir)pdb2mdb.exe "$(TargetPath)"
+if $(ConfigurationName) == Debug copy "$(TargetPath).mdb" "$(GameDir)\Bepinex\plugins\$(TargetFileName).mdb"
 
 if $(ConfigurationName) == Release copy "$(TargetPath)" "$(ProjectDir)\Publish_Template"
 if $(ConfigurationName) == Release copy "$(ProjectDir)README.md" "$(ProjectDir)\Publish_Template"
 if $(ConfigurationName) == Release (powershell Compress-Archive -Path '$(ProjectDir)Publish_Template\*' -DestinationPath '$(ProjectDir)Publish_Template\$(ProjectName).zip' -Force)</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>del "$(ProjectDir)\Assets\*.*"
+copy D:\Unity\Ripped\Cleaned_HealingBottles\Assets\AssetBundles "$(ProjectDir)\Assets" /Y</PreBuildEvent>
   </PropertyGroup>
 </Project>

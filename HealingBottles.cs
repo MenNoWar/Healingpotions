@@ -23,7 +23,7 @@ using UnityEngine.Assertions;
 
 namespace Hearthstone
 {
-    [BepInPlugin(HealingBottles.PluginGUID, "HealingBottles", "1.0.0")]
+    [BepInPlugin(HealingBottles.PluginGUID, "HealingBottles", "1.0.2")]
     [BepInDependency(Jotunn.Main.ModGuid, "2.9.0")]
     public class HealingBottles : BaseUnityPlugin
     {
@@ -69,7 +69,7 @@ namespace Hearthstone
                 };
             }
 
-            ItemManager.OnItemsRegistered -= VanillaPrefabsAvailable;
+            PrefabManager.OnVanillaPrefabsAvailable -= VanillaPrefabsAvailable;
 
             var meadows = loadPrefab(assetName0);
             meadows.Requirements = new RequirementConfig[] { rqB, rqD, new RequirementConfig("Mushroom", 5) };
@@ -140,7 +140,6 @@ namespace Hearthstone
         {
             private static bool Prefix(ItemDrop.ItemData item)
             {
-                var arrr = string.Join(", ", bottleNames);
                 if (item != null && item.m_shared != null && item.m_dropPrefab != null && item.m_dropPrefab.gameObject != null && bottleNames.Contains(item.m_dropPrefab.gameObject.name))
                 {
                     var name = item.m_dropPrefab.gameObject.name;

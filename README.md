@@ -23,6 +23,10 @@ Godly Healing Potion | Base + Flax | Plains | 4 | 100%
 - each potion has a minimal cooldown of 3 seconds
 
 ## Versions
+### 1.0.2
++ added better looking models for the potions
++ fixed a bug which threw an error when logging out of valheim (Thx to Margmas!)
+
 ### 1.0.1
 + removed falsely assigned "pickable" script from asset, which in some cases prevented picking up a dropped potion
 + fine tuned the clay-part texture to look more like Valheim item
