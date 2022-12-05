@@ -108,10 +108,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>del "$(ProjectDir)\Publish_Template\*.zip"
-del "$(TargetPath).mdb"
-
-if $(ConfigurationName) == Debug copy "$(TargetPath)" "$(GameDir)\Bepinex\plugins\$(TargetFileName)"
+    <PostBuildEvent>if $(ConfigurationName) == Debug copy "$(TargetPath)" "$(GameDir)\Bepinex\plugins\$(TargetFileName)"
 if $(ConfigurationName) == Debug $(SolutionDir)pdb2mdb.exe "$(TargetPath)"
 if $(ConfigurationName) == Debug copy "$(TargetPath).mdb" "$(GameDir)\Bepinex\plugins\$(TargetFileName).mdb"
 
@@ -121,6 +118,11 @@ if $(ConfigurationName) == Release (powershell Compress-Archive -Path '$(Project
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>del "$(ProjectDir)\Assets\*.*"
+del "$(ProjectDir)\publish_template\*.dll"
+del "$(ProjectDir)\Publish_Template\*.zip"
+del "$(ProjectDir)\Publish_Template\*.md"
+del "$(TargetPath).mdb"
+
 copy D:\Unity\Ripped\Cleaned_HealingBottles\Assets\AssetBundles "$(ProjectDir)\Assets" /Y</PreBuildEvent>
   </PropertyGroup>
 </Project>

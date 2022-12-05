@@ -25,6 +25,7 @@ Godly Healing Potion | Base + Flax | Plains | 4 | 100%
 ## Versions
 ### 1.0.2
 + added better looking models for the potions
++ added fancy pointlight to bottle, when in itemstand
 + fixed a bug which threw an error when logging out of valheim (Thx to Margmas!)
 
 ### 1.0.1
