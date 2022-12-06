@@ -1,0 +1,10 @@
+ManifestFileVersion: 0
+CRC: 1901922867
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: bottles
+      Dependencies: {}
+    Info_1:
+      Name: hs
+      Dependencies: {}

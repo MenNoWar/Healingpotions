@@ -23,7 +23,7 @@ using UnityEngine.Assertions;
 
 namespace Hearthstone
 {
-    [BepInPlugin(HealingBottles.PluginGUID, "HealingBottles", "1.0.2")]
+    [BepInPlugin(HealingBottles.PluginGUID, "HealingBottles", "1.0.3")]
     [BepInDependency(Jotunn.Main.ModGuid, "2.9.0")]
     public class HealingBottles : BaseUnityPlugin
     {
@@ -32,7 +32,8 @@ namespace Hearthstone
 
         private static List<string> bottleNames = new List<string>();
 
-        private static DateTime lastDateTime = DateTime.MinValue;
+        private static DateTime lastHealDateTime = DateTime.MinValue;
+        private static DateTime lastStaminaDateTime = DateTime.MinValue;
 
         private void Awake()
         {
@@ -43,10 +44,16 @@ namespace Hearthstone
 
         private void VanillaPrefabsAvailable()
         {
-            const string assetName0 = "Assets/_Custom/HealingBottle00.prefab";
-            const string assetName1 = "Assets/_Custom/HealingBottle01.prefab";
-            const string assetName2 = "Assets/_Custom/HealingBottle02.prefab";
-            const string assetName3 = "Assets/_Custom/HealingBottle03.prefab";
+            const string hbAssetName0 = "Assets/_Custom/HealingBottle00.prefab";
+            const string hbAssetName1 = "Assets/_Custom/HealingBottle01.prefab";
+            const string hbAssetName2 = "Assets/_Custom/HealingBottle02.prefab";
+            const string hbAssetName3 = "Assets/_Custom/HealingBottle03.prefab";
+
+            const string sbAssetName0 = "Assets/_Custom/StaminaBottle00.prefab"; // don't know why they are in fbx
+            const string sbAssetName1 = "Assets/_Custom/StaminaBottle01.prefab";
+            const string sbAssetName2 = "Assets/_Custom/StaminaBottle02.prefab";
+            const string sbAssetName3 = "Assets/_Custom/StaminaBottle03.prefab";
+
 
             var bundle = AssetUtils.LoadAssetBundleFromResources("bottles", typeof(HealingBottles).Assembly);
             var rqD = new RequirementConfig("Dandelion", 5);
@@ -71,31 +78,51 @@ namespace Hearthstone
 
             PrefabManager.OnVanillaPrefabsAvailable -= VanillaPrefabsAvailable;
 
-            var meadows = loadPrefab(assetName0);
+            #region Healing-Bottles
+            var meadows = loadPrefab(hbAssetName0);
             meadows.Requirements = new RequirementConfig[] { rqB, rqD, new RequirementConfig("Mushroom", 5) };
-            ItemManager.Instance.AddItem(new CustomItem(bundle, assetName0, true, meadows));
+            ItemManager.Instance.AddItem(new CustomItem(bundle, hbAssetName0, true, meadows));
 
-            var blackForest = loadPrefab(assetName1);
+            var blackForest = loadPrefab(hbAssetName1);
             blackForest.Requirements = new RequirementConfig[] { rqB, rqD, new RequirementConfig("Thistle", 5)};
-            ItemManager.Instance.AddItem(new CustomItem(bundle, assetName1, true, blackForest));
+            ItemManager.Instance.AddItem(new CustomItem(bundle, hbAssetName1, true, blackForest));
 
-            var mountain = loadPrefab(assetName2);
+            var mountain = loadPrefab(hbAssetName2);
             mountain.Requirements = new RequirementConfig[] { rqB, rqD, new RequirementConfig("FreezeGland", 5) };
-            ItemManager.Instance.AddItem(new CustomItem(bundle, assetName2, true, mountain));
+            ItemManager.Instance.AddItem(new CustomItem(bundle, hbAssetName2, true, mountain));
 
-            var plains = loadPrefab(assetName3);
+            var plains = loadPrefab(hbAssetName3);
             plains.Requirements = new RequirementConfig[] { rqB, rqD, new RequirementConfig("Flax", 5) };
-            ItemManager.Instance.AddItem(new CustomItem(bundle, assetName3, true, plains));
+            ItemManager.Instance.AddItem(new CustomItem(bundle, hbAssetName3, true, plains));
+            #endregion
+
+            #region Stamina-Bottles
+            var staminaM = loadPrefab(sbAssetName0);
+            staminaM.Requirements = new RequirementConfig[] { rqB, rqD, new RequirementConfig("Mushroom", 5) };
+            ItemManager.Instance.AddItem(new CustomItem(bundle, sbAssetName0, true, staminaM));
+
+            var staminaBF = loadPrefab(sbAssetName1);
+            staminaBF.Requirements = new RequirementConfig[] { rqB, rqD, new RequirementConfig("Thistle", 5) };
+            ItemManager.Instance.AddItem(new CustomItem(bundle, sbAssetName1, true, staminaBF));
+
+            var staminaMt = loadPrefab(sbAssetName2);
+            staminaMt.Requirements = new RequirementConfig[] { rqB, rqD, new RequirementConfig("FreezeGland", 5) };
+            ItemManager.Instance.AddItem(new CustomItem(bundle, sbAssetName2, true, staminaMt));
+
+            var staminaP = loadPrefab(sbAssetName3);
+            staminaP.Requirements = new RequirementConfig[] { rqB, rqD, new RequirementConfig("Flax", 5) };
+            ItemManager.Instance.AddItem(new CustomItem(bundle, sbAssetName3, true, staminaP));
+            #endregion
         }
-        
+
         public static bool Heal(float amount)
         {
             if (Player.m_localPlayer == null)
                 return false;
             
-            if ((DateTime.Now - lastDateTime).TotalSeconds <= 3)
+            if ((DateTime.Now - lastHealDateTime).TotalSeconds <= 3)
             {
-                Player.m_localPlayer.Message(MessageHud.MessageType.Center, "You can't drink this potion right now");
+                Player.m_localPlayer.Message(MessageHud.MessageType.Center, "You can't drink this healing potion right now");
                 return false;
             }
 
@@ -108,10 +135,28 @@ namespace Hearthstone
             else if (healthAmount > maxHealth)
                 healthAmount = maxHealth;
 
-
-
             Player.m_localPlayer.SetHealth(healthAmount);
-            lastDateTime = DateTime.Now;
+            lastHealDateTime = DateTime.Now;
+
+            return true;
+        }
+
+        public static bool Regenerate(float amount)
+        {
+            if (Player.m_localPlayer == null)
+                return false;
+
+            if ((DateTime.Now - lastStaminaDateTime).TotalSeconds <= 3)
+            {
+                Player.m_localPlayer.Message(MessageHud.MessageType.Center, "You can't drink this stamina potion right now");
+                return false;
+            }
+
+            var maxStamina = Player.m_localPlayer.GetMaxStamina();
+            var restoreAmount = (maxStamina / 100) * amount;
+
+            Player.m_localPlayer.AddStamina(restoreAmount);
+            lastStaminaDateTime = DateTime.Now;
 
             return true;
         }
@@ -143,10 +188,19 @@ namespace Hearthstone
                 if (item != null && item.m_shared != null && item.m_dropPrefab != null && item.m_dropPrefab.gameObject != null && bottleNames.Contains(item.m_dropPrefab.gameObject.name))
                 {
                     var name = item.m_dropPrefab.gameObject.name;
-                    if (name.EndsWith("00")) return Heal(25);
-                    if (name.EndsWith("01")) return Heal(50);
-                    if (name.EndsWith("02")) return Heal(75);
-                    if (name.EndsWith("03")) return Heal(100);
+                    if (name.ToUpper().StartsWith("HEAL"))
+                    {
+                        if (name.EndsWith("00")) return Heal(25);
+                        if (name.EndsWith("01")) return Heal(50);
+                        if (name.EndsWith("02")) return Heal(75);
+                        if (name.EndsWith("03")) return Heal(100);
+                    } else if (name.ToUpper().StartsWith("STAM"))
+                    {
+                        if (name.EndsWith("00")) return Regenerate(25);
+                        if (name.EndsWith("01")) return Regenerate(50);
+                        if (name.EndsWith("02")) return Regenerate(75);
+                        if (name.EndsWith("03")) return Regenerate(100);
+                    }
 
                     if (Debugger.IsAttached) // well, when we enter this, the item has not been found
                         Debugger.Break();

@@ -1,6 +1,6 @@
 {
   "name": "HealingPotions",
-  "version_number": "1.0.2",
+  "version_number": "1.0.3",
   "website_url": "https://github.com/MenNoWar/Healingpotions",
   "description": "Adds four different Healingpotions which heal in PERCENTS and not an absolute value, with unique and relative easy to obtain recipes.",
   "dependencies": [
