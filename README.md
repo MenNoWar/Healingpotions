@@ -15,7 +15,7 @@ Item | Requires | Biome | Cauldron Level | Heals
 --------|-------|--------|---------------|------
 Healing Potion | Base + Mushroom | Meadows | 1 | 25%
 Medium Healing Potion | Base + Thistle | Black Forest | 2 | 50%
-Huge Healing Potion | Base + FreezeGland | Mountains | 3 | 75%
+Huge Healing Potion | Base + Obsidian | Mountains | 3 | 75%
 Godly Healing Potion | Base + Flax | Plains | 4 | 100%
 
 #### Hint: 
@@ -23,6 +23,13 @@ Godly Healing Potion | Base + Flax | Plains | 4 | 100%
 - each potion has a minimal cooldown of 3 seconds
 
 ## Versions
+### 1.0.3
++ updated icons for the bottles
++ added stamina potions
++ changed requirement for huge healing potion to be Obsidian and not Freeceglant
++ updated unity asset-bundle
++ updated assets
+
 ### 1.0.2
 + added better looking models for the potions
 + added fancy pointlight to bottle, when in itemstand

@@ -88,7 +88,7 @@ namespace Hearthstone
             ItemManager.Instance.AddItem(new CustomItem(bundle, hbAssetName1, true, blackForest));
 
             var mountain = loadPrefab(hbAssetName2);
-            mountain.Requirements = new RequirementConfig[] { rqB, rqD, new RequirementConfig("FreezeGland", 5) };
+            mountain.Requirements = new RequirementConfig[] { rqB, rqD, new RequirementConfig("Obsidian", 5) };
             ItemManager.Instance.AddItem(new CustomItem(bundle, hbAssetName2, true, mountain));
 
             var plains = loadPrefab(hbAssetName3);

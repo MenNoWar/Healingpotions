@@ -117,12 +117,9 @@ if $(ConfigurationName) == Release copy "$(ProjectDir)README.md" "$(ProjectDir)\
 if $(ConfigurationName) == Release (powershell Compress-Archive -Path '$(ProjectDir)Publish_Template\*' -DestinationPath '$(ProjectDir)Publish_Template\$(ProjectName).zip' -Force)</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>del "$(ProjectDir)\Assets\*.*"
-del "$(ProjectDir)\publish_template\*.dll"
+    <PreBuildEvent>del "$(ProjectDir)\publish_template\*.dll"
 del "$(ProjectDir)\Publish_Template\*.zip"
 del "$(ProjectDir)\Publish_Template\*.md"
-del "$(TargetPath).mdb"
-
-copy D:\Unity\Ripped\Cleaned_HealingBottles\Assets\AssetBundles "$(ProjectDir)\Assets" /Y</PreBuildEvent>
+del "$(TargetPath).mdb"</PreBuildEvent>
   </PropertyGroup>
 </Project>
