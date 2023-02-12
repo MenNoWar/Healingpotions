@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3276158860
+CRC: 3478643549
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 12b0cc2691747f2399e6c8ba355b2ee8
+    Hash: 844eee9915a89f674ff12b612279d5fc
   TypeTreeHash:
     serializedVersion: 2
     Hash: cac8c795164c62f9972ef3679468a80a
@@ -61,10 +61,14 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/_Custom/HealingBottle00.prefab
 - Assets/_Custom/HealingBottle01.prefab
+- Assets/_Custom/ManaBottle01.prefab
+- Assets/_Custom/ManaBottle02.prefab
 - Assets/_Custom/StaminaBottle01.prefab
 - Assets/_Custom/StaminaBottle03.prefab
 - Assets/_Custom/StaminaBottle00.prefab
 - Assets/_Custom/StaminaBottle02.prefab
+- Assets/_Custom/ManaBottle03.prefab
+- Assets/_Custom/ManaBottle00.prefab
 - Assets/_Custom/HealingBottle02.prefab
 - Assets/_Custom/HealingBottle03.prefab
 Dependencies: []

@@ -1,22 +1,24 @@
 # Healingpotions
 
 ## What..
-Healingpotions adds four different Healingpotions that will add different % values of your current maximal health 
+Healingpotions adds four different Healing-, Stamina- and Eitr-Potions that will add different percent values of your current maximal stat 
 and are crafted in a cauldron.
 
-As the only alternative for vanilla healing meads (at least i currently found) only adds absolute values this one adds 
-a percentage of your current base hp. You will get the difference when having around 300Hp :)
+As the only alternative for vanilla meads (at least i currently found) only adds absolute values this one adds 
+a percentage of your current base stat. You will get the difference when having around 300 Stat :)
 
 ## Potions
-Each of the potion recipes need Dandelion and Blueberries as base items. 
-Additionaly there is one item, depending on the Biome the potion is intended to be used mostly.
+Each of the potion recipes need Dandelion as base item.<br />
+The second required item is the quality of the potion.<br />
+- Mushroom = Small Potion = gives 25% of the stat back<br />
+- Thistle = Medium Potion = gives 50% of the stat back<br />
+- Obsidian = Huge Potion = gives 75% of the stat back<br />
+- Flax = Godly Potion = gives 100% of the stat back<br />
 
-Item | Requires | Biome | Cauldron Level | Heals
---------|-------|--------|---------------|------
-Healing Potion | Base + Mushroom | Meadows | 1 | 25%
-Medium Healing Potion | Base + Thistle | Black Forest | 2 | 50%
-Huge Healing Potion | Base + Obsidian | Mountains | 3 | 75%
-Godly Healing Potion | Base + Flax | Plains | 4 | 100%
+The 3rd item specifies the type of the potion.<br />
+- Raspberry = Healing Potion<br />
+- Blueberries = Stamina Potion<br />
+- MushroomYellow = Eitr/Mana Potion<br />
 
 #### Hint: 
 - the potions look nice as decoration on an itemstand (depending on taste)
@@ -25,8 +27,9 @@ Godly Healing Potion | Base + Flax | Plains | 4 | 100%
 ## Versions
 ### 1.0.3
 + updated icons for the bottles
-+ added stamina potions
-+ changed requirement for huge healing potion to be Obsidian and not Freeceglant
++ added Stamina potions
++ added Eitr (Mana) potions
++ changed requirements for healing potions
 + updated unity asset-bundle
 + updated assets
 

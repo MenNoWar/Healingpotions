@@ -34,6 +34,7 @@ namespace Hearthstone
 
         private static DateTime lastHealDateTime = DateTime.MinValue;
         private static DateTime lastStaminaDateTime = DateTime.MinValue;
+        private static DateTime lastEitrDateTime = DateTime.MinValue;
 
         private void Awake()
         {
@@ -44,29 +45,48 @@ namespace Hearthstone
 
         private void VanillaPrefabsAvailable()
         {
-            const string hbAssetName0 = "Assets/_Custom/HealingBottle00.prefab";
-            const string hbAssetName1 = "Assets/_Custom/HealingBottle01.prefab";
-            const string hbAssetName2 = "Assets/_Custom/HealingBottle02.prefab";
-            const string hbAssetName3 = "Assets/_Custom/HealingBottle03.prefab";
+            // 1st thing: opt out of VanillaPrefabsAvailable:
+            PrefabManager.OnVanillaPrefabsAvailable -= VanillaPrefabsAvailable;
 
-            const string sbAssetName0 = "Assets/_Custom/StaminaBottle00.prefab"; // don't know why they are in fbx
-            const string sbAssetName1 = "Assets/_Custom/StaminaBottle01.prefab";
-            const string sbAssetName2 = "Assets/_Custom/StaminaBottle02.prefab";
-            const string sbAssetName3 = "Assets/_Custom/StaminaBottle03.prefab";
+            // assetBundle points to the Assets/bottles file. make sure it has Build-Action "embedded Resource":
+            var assetBundle = AssetUtils.LoadAssetBundleFromResources("bottles", typeof(HealingBottles).Assembly);
 
+            // some hardcoded prefab names. see bottles.manifest:
+            const string healingBottleAssetName0 = "Assets/_Custom/HealingBottle00.prefab";
+            const string healingBottleAssetName1 = "Assets/_Custom/HealingBottle01.prefab";
+            const string healingBottleAssetName2 = "Assets/_Custom/HealingBottle02.prefab";
+            const string healingBottleAssetName3 = "Assets/_Custom/HealingBottle03.prefab";
 
-            var bundle = AssetUtils.LoadAssetBundleFromResources("bottles", typeof(HealingBottles).Assembly);
-            var rqD = new RequirementConfig("Dandelion", 5);
-            var rqB = new RequirementConfig("Blueberries", 5);
+            const string staminaBottleAssetName0 = "Assets/_Custom/StaminaBottle00.prefab";
+            const string staminaBottleAssetName1 = "Assets/_Custom/StaminaBottle01.prefab";
+            const string staminaBottleAssetName2 = "Assets/_Custom/StaminaBottle02.prefab";
+            const string staminaBottleAssetName3 = "Assets/_Custom/StaminaBottle03.prefab";
 
-            ItemConfig loadPrefab(string prefabName)
+            const string manaBottleAssetName0 = "Assets/_Custom/ManaBottle00.prefab";
+            const string manaBottleAssetName1 = "Assets/_Custom/ManaBottle01.prefab";
+            const string manaBottleAssetName2 = "Assets/_Custom/ManaBottle02.prefab";
+            const string manaBottleAssetName3 = "Assets/_Custom/ManaBottle03.prefab";
+
+            // --- REQUIREMENTS ---
+            // basic requirement for *every* potion
+            var rcBaseAllPotions = new RequirementConfig("Dandelion", 5);
+
+            // requirements for the different qualities:
+            var rcSmallPotion = new RequirementConfig("Mushroom", 5);
+            var rcMediumPotion = new RequirementConfig("Thistle", 5);
+            var rcHugePotion = new RequirementConfig("Obsidian", 5);
+            var rcGodlyPotion = new RequirementConfig("Flax", 5);
+
+            # region helper functions:
+            // Load the Prefab asset from the bundle and add the requirements for the item ath the cauldron
+            ItemConfig LoadPrefab(string prefabName, params RequirementConfig[] requirements)
             {
-                var prefab = bundle.LoadAsset<GameObject>(prefabName);
+                var prefab = assetBundle.LoadAsset<GameObject>(prefabName);
                 var drop = prefab.GetComponent<ItemDrop>();
                 var shared = drop.m_itemData.m_shared;
                 bottleNames.Add(drop.gameObject.name);
                 
-                return new ItemConfig
+                var result = new ItemConfig
                 {
                     Name = shared.m_name,
                     Icons = shared.m_icons,
@@ -74,44 +94,46 @@ namespace Hearthstone
                     CraftingStation = "piece_cauldron",
                     MinStationLevel = shared.m_value
                 };
+
+                result.Requirements = requirements;
+
+                return result;
             }
 
-            PrefabManager.OnVanillaPrefabsAvailable -= VanillaPrefabsAvailable;
+            // simple wrapper for one line item creation
+            void AddItem(string assetName, params RequirementConfig[] requirements)
+            {
+                var item = LoadPrefab(assetName, requirements);
+                ItemManager.Instance.AddItem(new CustomItem(assetBundle, assetName, true, item));
+            }
+            #endregion
 
             #region Healing-Bottles
-            var meadows = loadPrefab(hbAssetName0);
-            meadows.Requirements = new RequirementConfig[] { rqB, rqD, new RequirementConfig("Mushroom", 5) };
-            ItemManager.Instance.AddItem(new CustomItem(bundle, hbAssetName0, true, meadows));
+            // requirement for healing potion:
+            var rcHealingPotion = new RequirementConfig("Raspberry", 5);
 
-            var blackForest = loadPrefab(hbAssetName1);
-            blackForest.Requirements = new RequirementConfig[] { rqB, rqD, new RequirementConfig("Thistle", 5)};
-            ItemManager.Instance.AddItem(new CustomItem(bundle, hbAssetName1, true, blackForest));
-
-            var mountain = loadPrefab(hbAssetName2);
-            mountain.Requirements = new RequirementConfig[] { rqB, rqD, new RequirementConfig("Obsidian", 5) };
-            ItemManager.Instance.AddItem(new CustomItem(bundle, hbAssetName2, true, mountain));
-
-            var plains = loadPrefab(hbAssetName3);
-            plains.Requirements = new RequirementConfig[] { rqB, rqD, new RequirementConfig("Flax", 5) };
-            ItemManager.Instance.AddItem(new CustomItem(bundle, hbAssetName3, true, plains));
+            AddItem(healingBottleAssetName0, rcBaseAllPotions, rcSmallPotion, rcHealingPotion);
+            AddItem(healingBottleAssetName1, rcBaseAllPotions, rcMediumPotion, rcHealingPotion);
+            AddItem(healingBottleAssetName2, rcBaseAllPotions, rcHugePotion, rcHealingPotion);
+            AddItem(healingBottleAssetName3, rcBaseAllPotions, rcGodlyPotion, rcHealingPotion);
             #endregion
 
             #region Stamina-Bottles
-            var staminaM = loadPrefab(sbAssetName0);
-            staminaM.Requirements = new RequirementConfig[] { rqB, rqD, new RequirementConfig("Mushroom", 5) };
-            ItemManager.Instance.AddItem(new CustomItem(bundle, sbAssetName0, true, staminaM));
+            // requirement for stamina potion:
+            var rcStaminaPotion = new RequirementConfig("Blueberries", 5);
+            AddItem(staminaBottleAssetName0, rcBaseAllPotions, rcSmallPotion, rcStaminaPotion);
+            AddItem(staminaBottleAssetName1, rcBaseAllPotions, rcMediumPotion, rcStaminaPotion);
+            AddItem(staminaBottleAssetName2, rcBaseAllPotions, rcHugePotion, rcStaminaPotion);
+            AddItem(staminaBottleAssetName3, rcBaseAllPotions, rcGodlyPotion, rcStaminaPotion);
+            #endregion
 
-            var staminaBF = loadPrefab(sbAssetName1);
-            staminaBF.Requirements = new RequirementConfig[] { rqB, rqD, new RequirementConfig("Thistle", 5) };
-            ItemManager.Instance.AddItem(new CustomItem(bundle, sbAssetName1, true, staminaBF));
-
-            var staminaMt = loadPrefab(sbAssetName2);
-            staminaMt.Requirements = new RequirementConfig[] { rqB, rqD, new RequirementConfig("FreezeGland", 5) };
-            ItemManager.Instance.AddItem(new CustomItem(bundle, sbAssetName2, true, staminaMt));
-
-            var staminaP = loadPrefab(sbAssetName3);
-            staminaP.Requirements = new RequirementConfig[] { rqB, rqD, new RequirementConfig("Flax", 5) };
-            ItemManager.Instance.AddItem(new CustomItem(bundle, sbAssetName3, true, staminaP));
+            #region mana bottles
+            // requirement for mana potion:
+            var rcManaPotion = new RequirementConfig("MushroomYellow", 5);
+            AddItem(manaBottleAssetName0, rcBaseAllPotions, rcSmallPotion, rcManaPotion);
+            AddItem(manaBottleAssetName1, rcBaseAllPotions, rcMediumPotion, rcManaPotion);
+            AddItem(manaBottleAssetName2, rcBaseAllPotions, rcHugePotion, rcManaPotion);
+            AddItem(manaBottleAssetName3, rcBaseAllPotions, rcGodlyPotion, rcManaPotion);
             #endregion
         }
 
@@ -127,7 +149,7 @@ namespace Hearthstone
             }
 
             var maxHealth = Player.m_localPlayer.GetMaxHealth();
-            var healAmount = (maxHealth / 100) * amount;
+            var healAmount = (maxHealth / 100) * amount; // like 1 * 25%
             var healthAmount = Player.m_localPlayer.GetHealth() + healAmount;
 
             if (healthAmount < 0)
@@ -137,6 +159,31 @@ namespace Hearthstone
 
             Player.m_localPlayer.SetHealth(healthAmount);
             lastHealDateTime = DateTime.Now;
+
+            return true;
+        }
+
+        public static bool FillMana(float amount)
+        {
+            if (Player.m_localPlayer == null)
+                return false;
+
+            if ((DateTime.Now - lastEitrDateTime).TotalSeconds <= 3)
+            {
+                Player.m_localPlayer.Message(MessageHud.MessageType.Center, "You can't drink this eitr potion right now");
+                return false;
+            }
+
+            var maxEitr = Player.m_localPlayer.GetMaxEitr();
+            if (maxEitr == 0) maxEitr = 1;
+            var eitrAmount = (maxEitr / 100) * amount;
+            
+            if (eitrAmount > maxEitr)
+                eitrAmount = maxEitr - eitrAmount;
+
+            Player.m_localPlayer.AddEitr(eitrAmount);
+
+            lastEitrDateTime = DateTime.Now;
 
             return true;
         }
@@ -200,6 +247,13 @@ namespace Hearthstone
                         if (name.EndsWith("01")) return Regenerate(50);
                         if (name.EndsWith("02")) return Regenerate(75);
                         if (name.EndsWith("03")) return Regenerate(100);
+                    }
+                    else if (name.ToUpper().StartsWith("MANA"))
+                    {
+                        if (name.EndsWith("00")) return FillMana(25);
+                        if (name.EndsWith("01")) return FillMana(50);
+                        if (name.EndsWith("02")) return FillMana(75);
+                        if (name.EndsWith("03")) return FillMana(100);
                     }
 
                     if (Debugger.IsAttached) // well, when we enter this, the item has not been found
