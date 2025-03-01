@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="packages\JotunnLib.2.23.2\build\JotunnLib.props" Condition="Exists('packages\JotunnLib.2.23.2\build\JotunnLib.props')" />
   <Import Project="GameDir.targets" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -7,7 +8,7 @@
     <ProjectGuid>{EDE91957-0B15-491A-ADC1-9C12D15C58D6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AssemblyName>HealingBottles</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <ApplicationVersion>1.0.0.0</ApplicationVersion>
     <FileAlignment>512</FileAlignment>
     <RootNamespace>HealingBottles</RootNamespace>
@@ -46,6 +47,7 @@
     <EmbeddedResource Include="Assets\bottles" />
     <None Include="Assets\bottles.manifest" />
     <None Include="GameDir.targets" />
+    <None Include="packages.config" />
     <None Include="Publish_Template\manifest.json" />
     <None Include="README.md" />
   </ItemGroup>
@@ -53,33 +55,23 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="0Harmony, Version=2.14.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\HarmonyX.2.14.0\lib\net452\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="Jotunn, Version=2.23.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\JotunnLib.2.23.2\lib\net462\Jotunn.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="0Harmony, Version=2.10.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\HarmonyX.2.10.1\lib\net45\0Harmony.dll</HintPath>
-    </Reference>
-    <Reference Include="Jotunn, Version=2.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\JotunnLib.2.9.0\lib\net462\Jotunn.dll</HintPath>
-    </Reference>
-    <Reference Include="MonoMod, Version=22.5.1.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\MonoMod.22.5.1.1\lib\net452\MonoMod.exe</HintPath>
-    </Reference>
-    <Reference Include="MonoMod.RuntimeDetour, Version=22.5.1.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\MonoMod.RuntimeDetour.22.5.1.1\lib\net452\MonoMod.RuntimeDetour.dll</HintPath>
-    </Reference>
-    <Reference Include="MonoMod.Utils, Version=22.5.1.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\MonoMod.Utils.22.5.1.1\lib\net452\MonoMod.Utils.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>$(GameDir)\valheim_Data\Managed\UnityEngine.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="assembly_valheim">
-      <HintPath>$(GameDir)\valheim_Data\Managed\assembly_valheim.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="BepInEx">
@@ -96,10 +88,6 @@
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(GameDir)\valheim_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>$(GameDir)\valheim_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
@@ -122,4 +110,10 @@ del "$(ProjectDir)\Publish_Template\*.zip"
 del "$(ProjectDir)\Publish_Template\*.md"
 del "$(TargetPath).mdb"</PreBuildEvent>
   </PropertyGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\JotunnLib.2.23.2\build\JotunnLib.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\JotunnLib.2.23.2\build\JotunnLib.props'))" />
+  </Target>
 </Project>

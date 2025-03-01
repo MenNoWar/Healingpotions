@@ -351,3 +351,5 @@ MigrationBackup/
 /Publish_Template/*.zip
 /Publish_Template/*.dll
 /Publish_Template/README.md
+/packages
+/.idea

@@ -1,10 +1,10 @@
 {
   "name": "HealingPotions",
-  "version_number": "1.0.3",
+  "version_number": "1.0.4",
   "website_url": "https://github.com/MenNoWar/Healingpotions",
   "description": "Adds different Potions which heal in PERCENTS and not an absolute value, with easy configurable recipes.",
   "dependencies": [
-    "denikson-BepInExPack_Valheim-5.4.1901",
-    "ValheimModding-Jotunn-2.10.4"
+    "denikson-BepInExPack_Valheim-5.4.2202",
+    "ValheimModding-Jotunn-2.23.2"
   ]
 }

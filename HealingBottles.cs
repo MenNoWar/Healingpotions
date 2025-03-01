@@ -23,8 +23,8 @@ using UnityEngine.Assertions;
 
 namespace Hearthstone
 {
-    [BepInPlugin(HealingBottles.PluginGUID, "HealingBottles", "1.0.3")]
-    [BepInDependency(Jotunn.Main.ModGuid, "2.10.4")]
+    [BepInPlugin(HealingBottles.PluginGUID, "HealingBottles", "1.0.4")]
+    [BepInDependency(Jotunn.Main.ModGuid, "2.23.2")]
     public class HealingBottles : BaseUnityPlugin
     {
         public const string PluginGUID = "mennowar.mods.HealingBottles";

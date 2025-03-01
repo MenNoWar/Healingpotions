@@ -32,6 +32,9 @@ The **3rd** item specifies the type of the potion.<br />
 as my Mod is not able to add/remove the items dynamically.<br /> All other settings like amounts/item names are updated on the fly.<br/> Other ConfigurationManagers like from cjayride may or may not work as i have not tested them.
 
 ## Versions
+### 1.0.4
++ changed Jotunn Version Dependency to 2.23.2
+
 ### 1.0.3
 + changed Jotunn Version Dependency to 2.10.4
 + updated/added icons for the bottles

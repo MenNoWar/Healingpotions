@@ -2,6 +2,6 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
-    <GameDir>C:\pub\Modding\Valheim</GameDir>
+    <GameDir>C:\ValheimModding\Valheim</GameDir>
   </PropertyGroup>
 </Project>
